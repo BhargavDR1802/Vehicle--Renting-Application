@@ -1,17 +1,11 @@
 package com.example.vehiclerentingapplication.service;
 
-import java.io.IOException;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.example.vehiclerentingapplication.entity.Image;
 import com.example.vehiclerentingapplication.entity.User;
-import com.example.vehiclerentingapplication.exception.FailedToUploadImageException;
+import com.example.vehiclerentingapplication.enums.UserRole;
 import com.example.vehiclerentingapplication.exception.UserNotFoundByIdException;
 import com.example.vehiclerentingapplication.mapper.UserMapper;
-import com.example.vehiclerentingapplication.repository.ImageRepository;
 import com.example.vehiclerentingapplication.repository.UserRepository;
 import com.example.vehiclerentingapplication.request.UserRequest;
 import com.example.vehiclerentingapplication.response.UserResponse;
@@ -28,11 +22,43 @@ public class UserService {
 		this.userRepository = userRepository;
 		this.mapper = mapper;
 	}
-
-	public UserResponse saveUser(UserRequest userRequest) {
-		User user = mapper.mapToUser(userRequest);
-		User savedUser = userRepository.save(user);
-		return mapper.mapToResponse(savedUser);
+	public UserResponse register(UserRequest userRequest, UserRole userRole) {
+		User user = mapper.mapToUser(userRequest, new User()); 
+		user.setRole(userRole); 
+		user = userRepository.save(user);
+		return mapper.mapToResponse(user);
 	}
+
+
+	public UserResponse findUserById(int userId)
+	{
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundByIdException("User Not Found By ID"));
+		UserResponse userResponse = mapper.mapToResponse(user);
+
+		Integer profilePictureId = userRepository.findImageById(userId);
+
+		if(profilePictureId!=null)
+		{
+			userResponse.setProfilePictureLink("/find/imageById?imageId="+profilePictureId);
+		}
+		else
+		{
+			userResponse.setProfilePictureLink(null);	
+		}
+		return userResponse;
+	}
+
+
+	public UserResponse updateUserById(int userId, UserRequest userRequest) {
+	    User existingUser = userRepository.findById(userId)
+	            .orElseThrow(() -> new UserNotFoundByIdException("User Not Found By ID: " + userId));
+	    User updatedUser = mapper.mapToUser(userRequest, existingUser);
+	    updatedUser = userRepository.save(updatedUser);
+	    return mapper.mapToResponse(updatedUser);
+	}
+
+
+
 
 }

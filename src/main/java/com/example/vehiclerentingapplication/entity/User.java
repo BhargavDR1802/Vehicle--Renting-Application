@@ -5,6 +5,7 @@ import com.example.vehiclerentingapplication.enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +28,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Image profilePicture;
 	public Image getProfilePicture() {
 		return profilePicture;
