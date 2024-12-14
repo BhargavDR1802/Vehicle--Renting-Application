@@ -32,13 +32,19 @@ public class ImageService {
 		Optional<User> optional = userRepository.findById(userId);
 
 		if (optional.isPresent()) {
-
+			User user = optional.get();
+			Image exImage = user.getProfilePicture();
+			
 			Image image = getImage(multipartFile);
 			image = imageRepository.save(image);
 
-			User user = optional.get();
 			user.setProfilePicture(image);
 			userRepository.save(user);
+			
+			if(exImage != null)
+			{
+				imageRepository.delete(exImage);
+			}
 		} else {
 			throw new UserNotFoundByIdException("Failed to Find the user");
 		}

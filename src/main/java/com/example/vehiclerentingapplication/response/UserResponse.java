@@ -2,10 +2,8 @@ package com.example.vehiclerentingapplication.response;
 
 import com.example.vehiclerentingapplication.enums.UserRole;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
-public class UserResponse {
+public class UserResponse
+{
 	private int userId;
 
 	private String username;
@@ -15,6 +13,18 @@ public class UserResponse {
 	private String email;
 
 	private UserRole role;
+	
+	private String profilePictureLink;
+
+	
+
+	public String getProfilePictureLink() {
+		return profilePictureLink;
+	}
+
+	public void setProfilePictureLink(String profilePictureLink) {
+		this.profilePictureLink = profilePictureLink;
+	}
 
 	public int getUserId() {
 		return userId;
@@ -55,5 +65,4 @@ public class UserResponse {
 	public void setRole(UserRole role) {
 		this.role = role;
 	}
-
 }
