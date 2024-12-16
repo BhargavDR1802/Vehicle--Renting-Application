@@ -1,6 +1,7 @@
 package com.example.vehiclerentingapplication.service;
 
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.vehiclerentingapplication.entity.User;
 import com.example.vehiclerentingapplication.enums.UserRole;
@@ -16,14 +17,19 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	private final UserMapper mapper;
+	
+	private final PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, UserMapper mapper) {
+
+	public UserService(UserRepository userRepository, UserMapper mapper, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
 		this.mapper = mapper;
+		this.passwordEncoder = passwordEncoder;
 	}
 	public UserResponse register(UserRequest userRequest, UserRole userRole) {
 		User user = mapper.mapToUser(userRequest, new User()); 
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole(userRole); 
 		user = userRepository.save(user);
 		return mapper.mapToResponse(user);
