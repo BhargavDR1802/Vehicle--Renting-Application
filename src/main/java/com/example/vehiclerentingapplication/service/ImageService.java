@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.vehiclerentingapplication.entity.Image;
 import com.example.vehiclerentingapplication.entity.User;
 import com.example.vehiclerentingapplication.exception.FailedToUploadImageException;
-import com.example.vehiclerentingapplication.exception.ImageNotFoundExceptionById;
+import com.example.vehiclerentingapplication.exception.ImageNotFoundByIdException;
 import com.example.vehiclerentingapplication.exception.UserNotFoundByIdException;
 import com.example.vehiclerentingapplication.repository.ImageRepository;
 import com.example.vehiclerentingapplication.repository.UserRepository;
@@ -71,7 +71,7 @@ public class ImageService {
 		}
 		else
 		{
-			throw new ImageNotFoundExceptionById("failed to find image by given id");
+			throw new ImageNotFoundByIdException("failed to find image by given id");
 		}
 	}
 }
