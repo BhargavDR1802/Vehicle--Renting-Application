@@ -13,28 +13,28 @@ public class ApplicatonExceptionHandler {
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure> handleUserNotFoundByIdException(UserNotFoundByIdException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
-				ex.getMessage(), "failed to find the user with the given id"));
+				ex.getMessage(), "Failed To Find The User With Ghe Given Id"));
 	}
 
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure> handleFailedToUploadImageException(FailedToUploadImageException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-				ErrorStructure.create(HttpStatus.NOT_FOUND.value(), ex.getMessage(), "failed to upload the image "));
+				ErrorStructure.create(HttpStatus.NOT_FOUND.value(), ex.getMessage(), "Failed To Upload The Image "));
 	}
 
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure> handleImageNotFoundByIdException(ImageNotFoundByIdException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
-				ex.getMessage(), "failed to find the image with the given id"));
+				ex.getMessage(), "Failed To Find Ihe Image With The Given Id"));
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure> handleVehicleNotFoundByIdException(VehicleNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
-				ex.getMessage(), "failed to find the Vehicle with the given id"));
+				ex.getMessage(), "Failed To Find The Vehicle With The Given Id"));
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure> handleUsernameNotFoundException(UsernameNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
-				ex.getMessage(), "failed to find the given Username"));
+				ex.getMessage(), "Failed To Find The Given Username"));
 	}
 }
