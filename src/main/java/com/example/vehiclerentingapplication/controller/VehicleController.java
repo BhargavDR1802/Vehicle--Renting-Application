@@ -2,6 +2,7 @@ package com.example.vehiclerentingapplication.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.vehiclerentingapplication.enums.VehicleType;
@@ -21,13 +22,13 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/vehicle/register")
     public ResponseEntity<ResponseStructure<VehicleResponse>> registerVehicle(
-            @RequestParam("vehicleType") VehicleType vehicleType, 
             @RequestBody VehicleRequest request) {
-        VehicleResponse response = vehicleService.register(request, vehicleType);
+        VehicleResponse response = vehicleService.registerVehicle(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseStructure.create(HttpStatus.CREATED.value(), vehicleType + " Vehicle Created", response));
+                .body(ResponseStructure.create(HttpStatus.CREATED.value(), " Vehicle Created", response));
     }
 
     @GetMapping("/vehicles")
@@ -37,6 +38,7 @@ public class VehicleController {
                 .body(ResponseStructure.create(HttpStatus.OK.value(), "All Vehicles Found", vehicleResponses));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update/vehicle")
     public ResponseEntity<ResponseStructure<VehicleResponse>> updateVehicle(@RequestParam("vehicleId") int vehicleId,
             @RequestBody VehicleRequest request) {

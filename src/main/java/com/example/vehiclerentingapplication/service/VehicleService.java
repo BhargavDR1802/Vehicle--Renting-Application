@@ -10,60 +10,52 @@ import com.example.vehiclerentingapplication.response.VehicleResponse;
 import com.example.vehiclerentingapplication.entity.Vehicle;
 import com.example.vehiclerentingapplication.mapper.VehicleMapper;
 import com.example.vehiclerentingapplication.repository.VehicleRepository;
+import com.example.vehiclerentingapplication.service.ImageService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class VehicleService {
 
-	private final VehicleRepository vehicleRepository;
-	private final VehicleMapper vehicleMapper;
+    private final VehicleRepository vehicleRepository;
+    private final VehicleMapper vehicleMapper;
+    private final ImageService imageService;
 
-	@Autowired
-	public VehicleService(VehicleRepository vehicleRepository, VehicleMapper vehicleMapper) {
-		this.vehicleRepository = vehicleRepository;
-		this.vehicleMapper = vehicleMapper;
-	}
+    @Autowired
+    public VehicleService(VehicleRepository vehicleRepository, VehicleMapper vehicleMapper, ImageService imageService) {
+        this.vehicleRepository = vehicleRepository;
+        this.vehicleMapper = vehicleMapper;
+        this.imageService = imageService;
+    }
 
-	public VehicleResponse register(VehicleRequest request, VehicleType vehicleType) {
+    public VehicleResponse registerVehicle(VehicleRequest request) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setBrand(request.getBrand());
+        vehicle.setModel(request.getModel());
+        vehicle.setVehicleType(request.getVehicleType());
+        vehicle.setFuelType(request.getFuelType());
+        Vehicle savedVehicle = vehicleRepository.save(vehicle);
 
-		Vehicle vehicle = new Vehicle();
-		vehicle.setBrand(request.getBrand());
-		vehicle.setModel(request.getModel());
-		vehicle.setVehicleType(vehicleType);
-		vehicle.setFuelType(request.getFuelType());
-		Vehicle savedVehicle = vehicleRepository.save(vehicle);
-		return vehicleMapper.mapToResponse(savedVehicle);
-	}
+        return vehicleMapper.mapToResponse(savedVehicle);
+    }
 
-	public List<VehicleResponse> findAllVehicles() {
+    public List<VehicleResponse> findAllVehicles() {
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        if (vehicles.isEmpty()) {
+            throw new VehicleNotFoundException("No Vehicles present");
+        }
+        return vehicleMapper.mapToResponseList(vehicles);
+    }
 
-		List<Vehicle> vehicles = vehicleRepository.findAll();
-		List<VehicleResponse> vehicleResponses = new ArrayList();
+    public VehicleResponse updateVehicleById(int vehicleId, VehicleRequest request) {
+        Vehicle existingVehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new VehicleNotFoundException("Vehicle not found"));
 
-		if (vehicles.isEmpty()) {
-			throw new VehicleNotFoundException("No Vehicles present");
-		}
-		for (Vehicle vehicle : vehicles) {
-			VehicleResponse response = vehicleMapper.mapToResponse(vehicle);
-			vehicleResponses.add(response);
-		}
+        existingVehicle.setBrand(request.getBrand());
+        existingVehicle.setModel(request.getModel());
+        existingVehicle.setFuelType(request.getFuelType());
+        Vehicle updatedVehicle = vehicleRepository.save(existingVehicle);
 
-		return vehicleResponses;
-	}
-
-	public VehicleResponse updateVehicleById(int vehicleId, VehicleRequest request) {
-
-		Vehicle existingVehicle = vehicleRepository.findById(vehicleId)
-				.orElseThrow(() -> new VehicleNotFoundException("Vehicle not found"));
-
-		existingVehicle.setBrand(request.getBrand());
-		existingVehicle.setModel(request.getModel());
-		existingVehicle.setFuelType(request.getFuelType());
-
-		Vehicle updatedVehicle = vehicleRepository.save(existingVehicle);
-
-		return vehicleMapper.mapToResponse(updatedVehicle);
-	}
+        return vehicleMapper.mapToResponse(updatedVehicle);
+    }
 }

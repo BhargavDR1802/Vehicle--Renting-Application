@@ -2,6 +2,7 @@ package com.example.vehiclerentingapplication.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,25 +25,33 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@PostMapping("/customer/register")
+	@PostMapping("/register/customer")
 	public ResponseEntity<ResponseStructure<UserResponse>> registerCustomer(@RequestBody UserRequest request) {
 		UserResponse response= userService.register(request,UserRole.CUSTOMER );
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ResponseStructure.create(HttpStatus.CREATED.value(), "Customer Created", response));
 	}
-	@PostMapping("/renting_partner/register")
+	@PostMapping("/register/renting_partner")
 	public ResponseEntity<ResponseStructure<UserResponse>> registerRentingPartner(@RequestBody UserRequest request) {
 		UserResponse response= userService.register(request,UserRole.RENTING_PARTNER);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(ResponseStructure.create(HttpStatus.CREATED.value(), "Renting Partner Created", response));
 	}
-	@GetMapping("/usersbyid")
-	public ResponseEntity<ResponseStructure<UserResponse>> findUserById(@RequestParam("userId")int userId)
+	@PostMapping("/register/admin")
+	public ResponseEntity<ResponseStructure<UserResponse>> registerAdmin(@RequestBody UserRequest request) {
+		UserResponse response= userService.register(request,UserRole.ADMIN);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ResponseStructure.create(HttpStatus.CREATED.value(), "Renting Partner Created", response));
+	}
+
+	@GetMapping("/account")
+	public ResponseEntity<ResponseStructure<UserResponse>> account()
 	{
-		UserResponse response = userService.findUserById();
+		UserResponse response = userService.account();
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ResponseStructure.create(HttpStatus.OK.value(),"User Found Successfully", response));
 	}
+	
 	@PutMapping("/updateuser")
 	public ResponseEntity<ResponseStructure<UserResponse>> updateUser(
 			@RequestBody UserRequest request) {

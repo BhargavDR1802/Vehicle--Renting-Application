@@ -39,7 +39,7 @@ public class UserService {
 	}
 
 
-	public UserResponse findUserById()
+	public UserResponse account()
 	{
 		//		User user = userRepository.findById(userId)
 		//				.orElseThrow(() -> new UserNotFoundByIdException("User Not Found By ID"));
