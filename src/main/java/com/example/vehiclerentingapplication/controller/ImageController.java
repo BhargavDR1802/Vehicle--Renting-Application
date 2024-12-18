@@ -1,3 +1,4 @@
+
 package com.example.vehiclerentingapplication.controller;
 
 import java.io.IOException;
@@ -20,22 +21,22 @@ public class ImageController {
 	private final ImageService imageService;
 
 	public ImageController(ImageService imageService) {
-		super();
 		this.imageService = imageService;
 	}
 
 	@PostMapping("/users/profile-picture")
-	public ResponseEntity<SimpleResponseStructure> addProfilePicture(@RequestParam("userId") int userId,
-			@RequestParam("file") MultipartFile file) throws IOException {
-		imageService.addUserProfilePicture(userId, file);
+	public ResponseEntity<SimpleResponseStructure> addProfilePicture(@RequestParam("file") MultipartFile file)
+			throws IOException {
+		imageService.uploadUserProfilePicture(file);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(SimpleResponseStructure.create(HttpStatus.OK.value(), "Profile picture added successfully"));
 	}
 
-	@GetMapping("/find/imageById")
-	public ResponseEntity<byte[]> findImageById(@RequestParam int imageId) {
-		Image image = imageService.findImageById(imageId);
-		return ResponseEntity.status(HttpStatus.FOUND).contentType(MediaType.valueOf(image.getContentType()))
+	@GetMapping("/users/profile-picture")
+	public ResponseEntity<byte[]> getProfilePicture() {
+		Image image = imageService.findImageByCurrentUser();
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.valueOf(image.getContentType()))
 				.body(image.getImageBytes());
 	}
 }
