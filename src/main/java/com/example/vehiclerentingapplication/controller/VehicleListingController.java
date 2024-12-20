@@ -27,9 +27,16 @@ public class VehicleListingController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseStructure.create(HttpStatus.OK.value(), "Vehicle Added Succsesfully", response));
     }
 
-    @GetMapping("all/listing")
+    @GetMapping("/listings")
     public ResponseEntity<ResponseStructure<List<VehicleListingResponse>>> getAllVehicleListings() {
         List<VehicleListingResponse> response= vehicleListingService.getAllVehicleListings();
         return ResponseEntity.status(HttpStatus.OK).body(ResponseStructure.create(HttpStatus.OK.value(), "All Vehicles Found Successfully", response));
     }
+    @GetMapping("/find-vehicle-listings")
+	public ResponseEntity<ResponseStructure<List<VehicleListingResponse>>> getVehicleListingsByVehicleId(
+	        @RequestParam("vehicleId") int vehicleId) {
+	    List<VehicleListingResponse> responses = vehicleListingService.getVehicleListingsByVehicleId(vehicleId);
+	    return ResponseEntity.ok(
+	            ResponseStructure.create(HttpStatus.OK.value(), "Vehicle Listings Retrieved Successfully", responses));
+	}
 }

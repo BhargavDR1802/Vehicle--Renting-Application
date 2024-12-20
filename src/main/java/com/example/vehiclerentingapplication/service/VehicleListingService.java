@@ -3,6 +3,7 @@ package com.example.vehiclerentingapplication.service;
 import com.example.vehiclerentingapplication.entity.User;
 import com.example.vehiclerentingapplication.entity.Vehicle;
 import com.example.vehiclerentingapplication.entity.VehicleListing;
+import com.example.vehiclerentingapplication.exception.VehicleNotFoundException;
 import com.example.vehiclerentingapplication.mapper.VehicleListingMapper;
 import com.example.vehiclerentingapplication.repository.UserRepository;
 import com.example.vehiclerentingapplication.repository.VehicleListingRepository;
@@ -48,6 +49,7 @@ public class VehicleListingService {
 		VehicleListing vehicleListing = vehicleListingMapper.mapToListing(request);
 		Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
 		vehicleListing.setVehicle(vehicle.get());
+		vehicleListing.setRentingPartner(rentingPartner);
 		VehicleListing savedListing = vehicleListingRepository.save(vehicleListing);
 
 		return vehicleListingMapper.mapToResponse(savedListing);
@@ -63,6 +65,22 @@ public class VehicleListingService {
 		}
 
 		return responseList;
+	}
+	public List<VehicleListingResponse> getVehicleListingsByVehicleId(int vehicleId) {
+		Vehicle vehicle = vehicleRepository.findById(vehicleId)
+				.orElseThrow(() -> new VehicleNotFoundException("Vehicle not found with ID: " + vehicleId));
+		List<VehicleListing> listings = vehicleListingRepository.findByVehicle(vehicle);
+
+		if (listings.isEmpty()) {
+			throw new VehicleNotFoundException("No listings found for Vehicle ID: " + vehicleId);
+		}
+
+		List<VehicleListingResponse> responses = new ArrayList<>();
+		for (VehicleListing listing : listings) {
+			responses.add(vehicleListingMapper.mapToResponse(listing));
+		}
+
+		return responses;
 	}
 
 }
