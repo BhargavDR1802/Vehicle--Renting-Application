@@ -1,5 +1,6 @@
 package com.example.vehiclerentingapplication.exception;
 
+import org.springframework.boot.context.config.ConfigDataLocationNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,4 +38,9 @@ public class ApplicatonExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
 				ex.getMessage(), "Failed To Find The Given Username"));
 	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure> handleLocationNotFoundException(LocationNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorStructure.create(HttpStatus.NOT_FOUND.value(),
+				ex.getMessage(), "Failed To Find The Location"));
+		}
 }

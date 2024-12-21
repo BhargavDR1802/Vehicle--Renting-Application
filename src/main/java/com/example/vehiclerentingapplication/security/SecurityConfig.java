@@ -29,7 +29,7 @@ public class SecurityConfig {
 			return http
 			.csrf(csrf -> csrf.disable()) //CROSS SITE REQUEST FORGERY(ADDITIONAL SECURITY DIABLES) 
 			.authorizeHttpRequests(authorize -> authorize
-					.requestMatchers("/register/renting_partner","/register/customer","/register/admin","/vehicles")// GIVEING ACCESS TO RESOURCES THAT DONT NEED LOGGING IN
+					.requestMatchers("/register/renting_partner","/register/customer","/register/admin","/vehicles,/locations/all")// GIVEING ACCESS TO RESOURCES THAT DONT NEED LOGGING IN
 					.permitAll()
 //					.requestMatchers("/vehicle/register")
 //					.hasAuthority("ADMIN")
