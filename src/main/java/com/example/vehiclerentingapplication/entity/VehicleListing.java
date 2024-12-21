@@ -1,5 +1,8 @@
 package com.example.vehiclerentingapplication.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.vehiclerentingapplication.enums.Seating;
 
 import jakarta.persistence.Entity;
@@ -9,8 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class VehicleListing {
@@ -26,13 +29,22 @@ public class VehicleListing {
 	@Enumerated(EnumType.STRING)
 	private Seating seating;
 
-	@Enumerated(EnumType.STRING)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User rentingPartner;
 
-	@Enumerated(EnumType.STRING)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Vehicle vehicle;
+	private Vehicle vehicle;	
+	
+	@ManyToMany
+	private List<Location> locations = new ArrayList();
+
+	public List<Location> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(List<Location> locations) {
+		this.locations = locations;
+	}
 
 	public int getListingId() {
 		return listingId;

@@ -1,10 +1,13 @@
 package com.example.vehiclerentingapplication.service;
 
+import com.example.vehiclerentingapplication.entity.Location;
 import com.example.vehiclerentingapplication.entity.User;
 import com.example.vehiclerentingapplication.entity.Vehicle;
 import com.example.vehiclerentingapplication.entity.VehicleListing;
+import com.example.vehiclerentingapplication.exception.LocationNotFoundException;
 import com.example.vehiclerentingapplication.exception.VehicleNotFoundException;
 import com.example.vehiclerentingapplication.mapper.VehicleListingMapper;
+import com.example.vehiclerentingapplication.repository.LocationRepository;
 import com.example.vehiclerentingapplication.repository.UserRepository;
 import com.example.vehiclerentingapplication.repository.VehicleListingRepository;
 import com.example.vehiclerentingapplication.repository.VehicleRepository;
@@ -14,12 +17,9 @@ import com.example.vehiclerentingapplication.security.AuthUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class VehicleListingService {
@@ -31,9 +31,9 @@ public class VehicleListingService {
 	private VehicleListingMapper vehicleListingMapper;
 
 	private final AuthUtil authUtil;
-
-
-
+	
+	@Autowired
+	private LocationRepository locationRepository;
 
 	public VehicleListingService(VehicleListingRepository vehicleListingRepository, UserRepository userRepository,
 			VehicleRepository vehicleRepository, VehicleListingMapper vehicleListingMapper, AuthUtil authUtil) {
@@ -66,21 +66,18 @@ public class VehicleListingService {
 
 		return responseList;
 	}
-	public List<VehicleListingResponse> getVehicleListingsByVehicleId(int vehicleId) {
-		Vehicle vehicle = vehicleRepository.findById(vehicleId)
-				.orElseThrow(() -> new VehicleNotFoundException("Vehicle not found with ID: " + vehicleId));
-		List<VehicleListing> listings = vehicleListingRepository.findByVehicle(vehicle);
+	public void addLocationToListing(int listingId, int locationId) {
+		VehicleListing vehicleListing = vehicleListingRepository.findById(listingId)
+				.orElseThrow(() -> new VehicleNotFoundException("Vehicle listing not found"));
 
-		if (listings.isEmpty()) {
-			throw new VehicleNotFoundException("No listings found for Vehicle ID: " + vehicleId);
+		Location location = locationRepository.findById(locationId)
+				.orElseThrow(() -> new LocationNotFoundException("Location not found"));
+		
+		if (!vehicleListing.getLocations().contains(location)) {
+			vehicleListing.getLocations().add(location);
 		}
 
-		List<VehicleListingResponse> responses = new ArrayList<>();
-		for (VehicleListing listing : listings) {
-			responses.add(vehicleListingMapper.mapToResponse(listing));
-		}
+		vehicleListing = vehicleListingRepository.save(vehicleListing);
 
-		return responses;
 	}
-
 }

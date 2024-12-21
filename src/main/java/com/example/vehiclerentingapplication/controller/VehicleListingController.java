@@ -4,6 +4,7 @@ import com.example.vehiclerentingapplication.request.VehicleListingRequest;
 import com.example.vehiclerentingapplication.response.VehicleListingResponse;
 import com.example.vehiclerentingapplication.service.VehicleListingService;
 import com.example.vehiclerentingapplication.util.ResponseStructure;
+import com.example.vehiclerentingapplication.util.SimpleResponseStructure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,11 +33,12 @@ public class VehicleListingController {
         List<VehicleListingResponse> response= vehicleListingService.getAllVehicleListings();
         return ResponseEntity.status(HttpStatus.OK).body(ResponseStructure.create(HttpStatus.OK.value(), "All Vehicles Found Successfully", response));
     }
-    @GetMapping("/find-vehicle-listings")
-	public ResponseEntity<ResponseStructure<List<VehicleListingResponse>>> getVehicleListingsByVehicleId(
-	        @RequestParam("vehicleId") int vehicleId) {
-	    List<VehicleListingResponse> responses = vehicleListingService.getVehicleListingsByVehicleId(vehicleId);
-	    return ResponseEntity.ok(
-	            ResponseStructure.create(HttpStatus.OK.value(), "Vehicle Listings Retrieved Successfully", responses));
+
+	@PostMapping("/add-location")
+	public ResponseEntity<ResponseStructure<String>> addLocationToListing(@RequestParam int listingId,	@RequestParam int locationId) {
+
+		 vehicleListingService.addLocationToListing(listingId, locationId);
+	    return ResponseEntity.status(HttpStatus.OK).body(ResponseStructure.create(HttpStatus.OK.value(), "Location to Vehicle Listing Added  Successfully","Location added to vehicle listings"));
+
 	}
 }
