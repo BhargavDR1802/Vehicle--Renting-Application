@@ -19,7 +19,7 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('RENTING_PARTNER')")
     @PostMapping("/locations/add")
     public  ResponseEntity<ResponseStructure<LocationResponse>> addLocation(@RequestBody LocationRequest locationRequest) {
         LocationResponse locationResponse = locationService.addLocation(locationRequest);

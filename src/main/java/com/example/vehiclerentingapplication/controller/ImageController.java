@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.vehiclerentingapplication.entity.Image;
-import com.example.vehiclerentingapplication.entity.Vehicle;
 import com.example.vehiclerentingapplication.service.ImageService;
 import com.example.vehiclerentingapplication.util.SimpleResponseStructure;
 
