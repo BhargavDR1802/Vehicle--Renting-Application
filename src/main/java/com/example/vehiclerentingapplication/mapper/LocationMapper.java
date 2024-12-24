@@ -23,6 +23,7 @@ public class LocationMapper {
 
     public LocationResponse toResponse(Location location) {
         LocationResponse response = new LocationResponse();
+        response.setLocationId(location.getLocationId());
         response.setAddressLine(location.getAddressLine());
         response.setAddressLineOptional(location.getAddressLineOptional());
         response.setArea(location.getArea());

@@ -2,6 +2,7 @@ package com.example.vehiclerentingapplication.response;
 
 public class LocationResponse {
 
+	private int locationId;
 	private String addressLine;
 	private String addressLineOptional;
 	private String area;
@@ -11,6 +12,12 @@ public class LocationResponse {
 	private int pincode;
 	private String phoneNumber;
 	
+	public int getLocationId() {
+		return locationId;
+	}
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
 	public String getAddressLine() {
 		return addressLine;
 	}

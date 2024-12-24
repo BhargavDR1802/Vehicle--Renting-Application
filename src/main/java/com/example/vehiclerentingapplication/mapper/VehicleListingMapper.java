@@ -1,13 +1,10 @@
 package com.example.vehiclerentingapplication.mapper;
 
-import com.example.vehiclerentingapplication.entity.Location;
+import org.springframework.stereotype.Component;
+
 import com.example.vehiclerentingapplication.entity.VehicleListing;
 import com.example.vehiclerentingapplication.request.VehicleListingRequest;
 import com.example.vehiclerentingapplication.response.VehicleListingResponse;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class VehicleListingMapper {
@@ -27,12 +24,6 @@ public class VehicleListingMapper {
 		response.setVehicleNo(vehicleListing.getVehicleNo());
 		response.setPricePerDay(vehicleListing.getPricePerDay());
 		response.setSeating(vehicleListing.getSeating());
-		List<Integer> locationIds = new ArrayList<>();
-		for (Location location : vehicleListing.getLocations()) {
-			locationIds.add(location.getLocationId());
-		}
-		response.setLocationIds(locationIds);
-
 		return response;
 	}
 }
